@@ -1,0 +1,26 @@
+{
+  "name": "webtoucher/omnipay-rbkmoney",
+  "description": "RBK.money driver for the Omnipay payment processing library",
+  "keywords": ["rbkmoney", "gateway", "merchant", "omnipay", "pay", "payment", "payments", "visa", "mastercard"],
+  "homepage": "https://github.com/webtoucher/omnipay-rbkmoney",
+  "type": "library",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Alexey Kuznetsov",
+      "email": "mirakuru@webtoucher.ru"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "omnipay/common": "~2.0"
+  },
+  "require-dev": {
+    "omnipay/tests": "~2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Omnipay\\RbkMoney\\": "src"
+    }
+  }
+}
