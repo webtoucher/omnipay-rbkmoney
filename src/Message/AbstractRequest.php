@@ -24,6 +24,9 @@ abstract class AbstractRequest extends BaseAbstractRequest
         return 'POST';
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getData()
     {
         return [];

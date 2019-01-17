@@ -171,8 +171,26 @@ class Gateway extends AbstractGateway
      * @param array $parameters
      * @return AbstractRequest
      */
+    public function createInvoice(array $parameters = [])
+    {
+        return $this->getRequest('CreateInvoice', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     * @return AbstractRequest
+     */
     public function getInvoice(array $parameters = [])
     {
         return $this->getRequest('GetInvoiceRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     * @return AbstractRequest
+     */
+    public function rescindInvoice(array $parameters = [])
+    {
+        return $this->getRequest('RescindInvoice', $parameters);
     }
 }

@@ -25,6 +25,44 @@ or add
 
 to the ```require``` section of your `composer.json` file.
 
+## Usage
+
+Configure API client:
+
+```php
+    $gateway = \Omnipay\Omnipay::create('RbkMoney');
+    $gateway->setShopId('[SHOP_ID]');
+    $gateway->setApiKey('[API_PRIVATE_KEY]');
+    $gateway->setLogger(function ($message, $level = 'info') {
+        // You can add logging for your requests
+    });
+```
+
+Then you can create invoice.
+
+```php
+    $cart = new \Omnipay\RbkMoney\Cart;
+    $cart->addItem(new \Omnipay\RbkMoney\CartItem('Some product', 100));
+    $cart->addItem(new \Omnipay\RbkMoney\CartItem('Another product', 200, 1, 20));
+
+    $request = $gateway->createInvoice([
+        'cart' => $cart,
+        'currency' => 'RUB',
+        'transactionId' => 1234,
+        'product' => "Заказ 1234",
+    ]);
+
+    try {
+        $response = $request->send();
+
+        if ($response->isSuccessful()) {
+            // Your handler
+        }
+    } catch (\Omnipay\Common\Exception\OmnipayException $e) {
+        // Your handler
+    }
+```
+
 ## Support
 
 If you are having general issues with Omnipay, we suggest posting on
