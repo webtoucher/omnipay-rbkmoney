@@ -2,22 +2,25 @@
 
 namespace Omnipay\RbkMoney\Message\v2;
 
-class GetInvoiceRequest extends AbstractRequest
+class FulfillInvoice extends AbstractRequest
 {
     /**
      * @inheritdoc
      */
     public function getEndpoint()
     {
-        return "{$this->getBaseEndpoint()}/processing/invoices/{$this->getId()}";
+        return "{$this->getBaseEndpoint()}/processing/invoices/{$this->getId()}/fulfill";
     }
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
-    protected function getHttpMethod()
+    public function getData()
     {
-        return 'GET';
+        return array_filter([
+            'reason' => $this->getDescription(),
+        ]);
     }
 
     /**

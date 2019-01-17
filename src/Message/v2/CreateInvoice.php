@@ -6,6 +6,9 @@ use Omnipay\RbkMoney\Cart;
 
 class CreateInvoice extends AbstractRequest
 {
+    /**
+     * @inheritdoc
+     */
     public function getEndpoint()
     {
         return "{$this->getBaseEndpoint()}/processing/invoices";

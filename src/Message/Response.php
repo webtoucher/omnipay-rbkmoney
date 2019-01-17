@@ -17,7 +17,7 @@ class Response extends AbstractResponse
 
     public function isSuccessful()
     {
-        return $this->getCode() !== 200;
+        return $this->getCode() < 400;
     }
 
     public function getCode()

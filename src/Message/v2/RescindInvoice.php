@@ -4,9 +4,23 @@ namespace Omnipay\RbkMoney\Message\v2;
 
 class RescindInvoice extends AbstractRequest
 {
+    /**
+     * @inheritdoc
+     */
     public function getEndpoint()
     {
         return "{$this->getBaseEndpoint()}/processing/invoices/{$this->getId()}/rescind";
+    }
+
+    /**
+     * @inheritdoc
+     * @throws \Exception
+     */
+    public function getData()
+    {
+        return array_filter([
+            'reason' => $this->getDescription(),
+        ]);
     }
 
     /**
