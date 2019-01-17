@@ -2,17 +2,32 @@
 
 namespace Omnipay\RbkMoney;
 
+use Guzzle\Http\ClientInterface;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\RbkMoney\Message\AbstractRequest;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 class Gateway extends AbstractGateway
 {
+    /**
+     * @var callable
+     */
+    protected $logger;
+
     /**
      * @inheritdoc
      */
     public function getName()
     {
         return 'RBK.money';
+    }
+
+    public function __construct(ClientInterface $httpClient = null, HttpRequest $httpRequest = null)
+    {
+        parent::__construct($httpClient, $httpRequest);
+        // Default logger keeps silent
+        $this->logger = function ($message, $level) {
+        };
     }
 
     /**
@@ -25,7 +40,6 @@ class Gateway extends AbstractGateway
             'version' => 'v2',
             'shopId' => '',
             'apiKey' => '',
-            'logger' => function ($message, $level = 'info') { },
         ];
     }
 
@@ -114,16 +128,6 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * Get logger function.
-     *
-     * @return callable
-     */
-    public function getLogger()
-    {
-        return $this->getParameter('logger');
-    }
-
-    /**
      * Set logger function.
      *
      * @param callable $value
@@ -131,7 +135,20 @@ class Gateway extends AbstractGateway
      */
     public function setLogger($value)
     {
-        return $this->setParameter('logger', $value);
+        $this->logger = $value;
+        return $this;
+    }
+
+    /**
+     * Log a message.
+     *
+     * @param string $message
+     * @param string $level
+     * @return void
+     */
+    protected function log($message, $level = 'info')
+    {
+        call_user_func($this->logger, $message, $level);
     }
 
     /**
@@ -145,7 +162,7 @@ class Gateway extends AbstractGateway
         $parameters['baseEndpoint'] = "{$this->getGateUrl()}/$version";
         $parameters['shopId'] = $this->getShopId();
         $parameters['apiKey'] = $this->getApiKey();
-        $parameters['logger'] = $this->getLogger();
+        $parameters['logger'] = $this->logger;
 
         return $this->createRequest("\\Omnipay\\RbkMoney\\Message\\$version\\$name", $parameters);
     }

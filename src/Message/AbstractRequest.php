@@ -10,6 +10,11 @@ use Omnipay\Common\Message\ResponseInterface;
 abstract class AbstractRequest extends BaseAbstractRequest
 {
     /**
+     * @var callable
+     */
+    protected $logger;
+
+    /**
      * Get HTTP Method.
      *
      * @return string
@@ -52,7 +57,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
             }
         );
 
-        $requestId = time() . uniqid('', true);
+        $requestId = str_replace('.', '', microtime(true));
         $headers = [
             'X-Request-ID' => $requestId,
             'Authorization' => $this->getToken(),
@@ -61,15 +66,16 @@ abstract class AbstractRequest extends BaseAbstractRequest
         ];
 
         if ($this->getHttpMethod() === 'GET') {
-            $this->getLogger()("Request to RBK.money API: [$requestId] [GET] "
-                . $this->getEndpoint() . '?' . http_build_query($data));
+            $query = http_build_query($data);
+            $this->log("Request to RBK.money API: [$requestId] [GET] "
+                . $this->getEndpoint() . ($query ? "?$query" : ''));
             $httpRequest = $this->httpClient->createRequest(
                 $this->getHttpMethod(),
                 $this->getEndpoint() . '?' . http_build_query($data),
                 $headers
             );
         } else {
-            $this->getLogger()("Request to RBK.money API: [$requestId] [" . $this->getHttpMethod() . '] '
+            $this->log("Request to RBK.money API: [$requestId] [" . $this->getHttpMethod() . '] '
                 . $this->getEndpoint() . ' ' . json_encode($data));
             $httpRequest = $this->httpClient->createRequest(
                 $this->getHttpMethod(),
@@ -84,10 +90,10 @@ abstract class AbstractRequest extends BaseAbstractRequest
             // Empty response body should be parsed also as and empty array
             $responseData = $httpResponse->getBody(true) ? $httpResponse->json() : [];
             $responseStatus = $httpResponse->getStatusCode();
-            $this->getLogger()("Response from RBK.money API: [$requestId] [$responseStatus] $responseData");
+            $this->log("Response from RBK.money API: [$requestId] [$responseStatus] " . $httpResponse->getBody(true));
             return $this->response = $this->createResponse($responseData, $responseStatus);
         } catch (\Exception $e) {
-            $this->getLogger()("Request is failed: [$requestId] {$e->getMessage()}", 'error');
+            $this->log("Request is failed: [$requestId] {$e->getMessage()}", 'error');
             throw new InvalidResponseException(
                 'Error communicating with payment gateway: ' . $e->getMessage(),
                 $e->getCode()
@@ -176,16 +182,6 @@ abstract class AbstractRequest extends BaseAbstractRequest
     }
 
     /**
-     * Get logger function.
-     *
-     * @return callable
-     */
-    public function getLogger()
-    {
-        return $this->getParameter('logger');
-    }
-
-    /**
      * Set logger function.
      *
      * @param callable $value
@@ -193,6 +189,19 @@ abstract class AbstractRequest extends BaseAbstractRequest
      */
     public function setLogger($value)
     {
-        return $this->setParameter('logger', $value);
+        $this->logger = $value;
+        return $this;
+    }
+
+    /**
+     * Log a message.
+     *
+     * @param string $message
+     * @param string $level
+     * @return void
+     */
+    protected function log($message, $level = 'info')
+    {
+        call_user_func($this->logger, $message, $level);
     }
 }

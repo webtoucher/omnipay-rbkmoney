@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\RbkMoney\Message;
+namespace Omnipay\RbkMoney\Message\v2;
 
 class GetInvoiceRequest extends AbstractRequest
 {
