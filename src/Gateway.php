@@ -173,7 +173,7 @@ class Gateway extends AbstractGateway
      */
     public function createInvoice(array $parameters = [])
     {
-        return $this->getRequest('CreateInvoice', $parameters);
+        return $this->getRequest('CreateInvoiceRequest', $parameters);
     }
 
     /**
@@ -191,7 +191,7 @@ class Gateway extends AbstractGateway
      */
     public function fulfillInvoice(array $parameters = [])
     {
-        return $this->getRequest('FulfillInvoice', $parameters);
+        return $this->getRequest('FulfillInvoiceRequest', $parameters);
     }
 
     /**
@@ -200,6 +200,6 @@ class Gateway extends AbstractGateway
      */
     public function rescindInvoice(array $parameters = [])
     {
-        return $this->getRequest('RescindInvoice', $parameters);
+        return $this->getRequest('RescindInvoiceRequest', $parameters);
     }
 }

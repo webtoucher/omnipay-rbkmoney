@@ -4,7 +4,7 @@ namespace Omnipay\RbkMoney\Message\v2;
 
 use Omnipay\RbkMoney\Cart;
 
-class CreateInvoice extends AbstractRequest
+class CreateInvoiceRequest extends AbstractRequest
 {
     /**
      * @inheritdoc

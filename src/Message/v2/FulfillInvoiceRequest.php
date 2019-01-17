@@ -2,14 +2,14 @@
 
 namespace Omnipay\RbkMoney\Message\v2;
 
-class RescindInvoice extends AbstractRequest
+class FulfillInvoiceRequest extends AbstractRequest
 {
     /**
      * @inheritdoc
      */
     public function getEndpoint()
     {
-        return "{$this->getBaseEndpoint()}/processing/invoices/{$this->getId()}/rescind";
+        return "{$this->getBaseEndpoint()}/processing/invoices/{$this->getId()}/fulfill";
     }
 
     /**
