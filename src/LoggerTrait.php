@@ -55,7 +55,7 @@ trait LoggerTrait
      */
     protected function log($message, $level = 'info')
     {
-        if ($this->getNoLog()) {
+        if (!$this->getNoLog()) {
             call_user_func($this->logger, $message, $level);
         }
     }
