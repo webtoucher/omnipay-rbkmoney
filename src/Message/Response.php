@@ -20,6 +20,20 @@ class Response extends AbstractResponse
         return $this->getCode() < 400;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getMessage()
+    {
+        if (isset($this->data['message'])) {
+            return $this->data['message'];
+        }
+        if (isset($this->data['description'])) {
+            return $this->data['description'];
+        }
+        return null;
+    }
+
     public function getCode()
     {
         return $this->statusCode;

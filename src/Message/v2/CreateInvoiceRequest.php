@@ -35,6 +35,14 @@ class CreateInvoiceRequest extends AbstractRequest
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function createResponse($data, $statusCode)
+    {
+        return $this->response = new CreateInvoiceResponse($this, $data, $statusCode);
+    }
+
+    /**
      * Get due date.
      *
      * @return string
