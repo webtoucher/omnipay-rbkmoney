@@ -15,6 +15,9 @@ class CreatePaymentResponse extends BaseResponse
             'id' => $this->data['id'],
             'invoiceId' => $this->data['invoiceID'],
             'makeRecurrent' => $this->data['makeRecurrent'],
+            'cardNumberMask' => isset($this->data['payer']['paymentToolDetails'])
+                ? $this->data['payer']['paymentToolDetails']['cardNumberMask']
+                : null,
         ];
     }
 }
