@@ -13,7 +13,8 @@
   ],
   "require": {
     "php": ">=5.4.0",
-    "omnipay/common": "~2.0"
+    "omnipay/common": "~2.0",
+    "ext-openssl": "*"
   },
   "require-dev": {
     "omnipay/tests": "~2.0"

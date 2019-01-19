@@ -220,4 +220,14 @@ class Gateway extends AbstractGateway
     {
         return $this->getRequest('CreatePaymentRequest', $parameters);
     }
+
+    /**
+     * @param array $parameters
+     * @return AbstractRequest
+     */
+    public function webHook(array $parameters = [])
+    {
+        $parameters['logger'] = $this->logger;
+        return $this->createRequest('\Omnipay\RbkMoney\Message\WebHookRequest', $parameters);
+    }
 }
