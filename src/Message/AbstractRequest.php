@@ -6,13 +6,11 @@ use Guzzle\Common\Event;
 use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractRequest as BaseAbstractRequest;
 use Omnipay\Common\Message\ResponseInterface;
+use Omnipay\RbkMoney\LoggerTrait;
 
 abstract class AbstractRequest extends BaseAbstractRequest
 {
-    /**
-     * @var callable
-     */
-    protected $logger;
+    use LoggerTrait;
 
     /**
      * Get HTTP Method.
@@ -182,29 +180,5 @@ abstract class AbstractRequest extends BaseAbstractRequest
     public function setApiKey($value)
     {
         return $this->setParameter('apiKey', $value);
-    }
-
-    /**
-     * Set logger function.
-     *
-     * @param callable $value
-     * @return $this
-     */
-    public function setLogger($value)
-    {
-        $this->logger = $value;
-        return $this;
-    }
-
-    /**
-     * Log a message.
-     *
-     * @param string $message
-     * @param string $level
-     * @return void
-     */
-    protected function log($message, $level = 'info')
-    {
-        call_user_func($this->logger, $message, $level);
     }
 }
