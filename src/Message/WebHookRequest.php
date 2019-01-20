@@ -61,6 +61,27 @@ class WebHookRequest extends AbstractRequest
     }
 
     /**
+     * Get project name.
+     *
+     * @return string
+     */
+    public function getProject()
+    {
+        return $this->getParameter('project');
+    }
+
+    /**
+     * Set project name.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setProject($value)
+    {
+        return $this->setParameter('project', $value);
+    }
+
+    /**
      * Get request signature.
      *
      * @return string
@@ -97,6 +118,17 @@ class WebHookRequest extends AbstractRequest
             if (1 === openssl_verify($content, $this->getSignature(), $publicKeyId, OPENSSL_ALGO_SHA256)) {
                 $this->log("Webhook is verified successfully: [$requestId]");
                 return $content;
+            }
+        }
+        if ($currentProject = $this->getProject()) {
+            $data = json_decode($content, true);
+            $project = isset($data['invoice']) && isset($data['invoice']['metadata'])
+                && isset($data['invoice']['metadata']['project'])
+                ? $data['invoice']['metadata']['project']
+                : null;
+            if ($project && $project === $currentProject) {
+                $this->log("Webhook is not for this project (it is for \"$project\"), so it was rejected: [$requestId]");
+                throw new InvalidRequestException('Webhook is not for this project, so it was rejected', 200);
             }
         }
         $this->log("Webhook has failed verification: [$requestId]");

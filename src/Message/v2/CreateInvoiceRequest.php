@@ -28,9 +28,10 @@ class CreateInvoiceRequest extends AbstractRequest
             'product' => $this->getProduct(),
             'description' => $this->getDescription(),
             'cart' => $this->getCartArray(),
-            'metadata' => [
+            'metadata' => array_filter([
                 'order_id' => $this->getTransactionId(),
-            ],
+                'project' => $this->getProject(),
+            ]),
         ]);
     }
 
@@ -83,6 +84,27 @@ class CreateInvoiceRequest extends AbstractRequest
     public function setProduct($value)
     {
         return $this->setParameter('product', $value);
+    }
+
+    /**
+     * Get project name.
+     *
+     * @return string
+     */
+    public function getProject()
+    {
+        return $this->getParameter('project');
+    }
+
+    /**
+     * Set project name.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setProject($value)
+    {
+        return $this->setParameter('project', $value);
     }
 
     /**
