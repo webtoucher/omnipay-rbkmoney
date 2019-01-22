@@ -20,6 +20,7 @@ class GetInvoiceEventsResponse extends BaseResponse
             if ($item['id'] > $lastEventId) {
                 $lastEventId = $item['id'];
                 foreach ($item['changes'] as $event) {
+                    $event['id'] = $item['id'];
                     $events[] = $event;
                 }
             }
